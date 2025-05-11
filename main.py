@@ -1,29 +1,18 @@
 import os #change#
-import gdown #change#
+#import gdown #change#
 import streamlit as st
 import tensorflow as tf
 import numpy as np
 
 
 #Tensorflow Model Prediction
-
-def download_model_from_drive():
-    file_id = '17Mfl1xAc7ONu0zleprGE8uOARs8fAE6k'
-    url = f'https://drive.google.com/uc?id={file_id}'
-    output = 'trained_model.keras'
-
-    if not os.path.exists(output):
-        gdown.download(url, output, quiet=False)
-
 def model_prediction(test_image):
-    download_model_from_drive()
     model = tf.keras.models.load_model("trained_model.keras")
-    
-    image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128, 128))
+    image = tf.keras.preprocessing.image.load_img(test_image,target_size=(128,128))
     input_arr = tf.keras.preprocessing.image.img_to_array(image)
-    input_arr = np.array([input_arr])  # Convert single image to batch
+    input_arr = np.array([input_arr]) #convert single image to batch
     predictions = model.predict(input_arr)
-    return np.argmax(predictions)
+    return np.argmax(predictions) #return index of max element
 #Sidebar
 st.sidebar.title("Dashboard")
 app_mode = st.sidebar.selectbox("Select Page",["Home","About","Disease Recognition"])
