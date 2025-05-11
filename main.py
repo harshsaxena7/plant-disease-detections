@@ -1,55 +1,66 @@
+import os #change#
+import gdown #change#
 import streamlit as st
 import tensorflow as tf
 import numpy as np
 
 
 #Tensorflow Model Prediction
-def model_prediction(test_image):
-    model = tf.keras.models.load_model("trained_plant_disease_model.keras")
-    image = tf.keras.preprocessing.image.load_img(test_image,target_size=(128,128))
-    input_arr = tf.keras.preprocessing.image.img_to_array(image)
-    input_arr = np.array([input_arr]) #convert single image to batch
-    predictions = model.predict(input_arr)
-    return np.argmax(predictions) #return index of max element
 
+def download_model_from_drive():
+    file_id = '17Mfl1xAc7ONu0zleprGE8uOARs8fAE6k'
+    url = f'https://drive.google.com/uc?id={file_id}'
+    output = 'trained_model.keras'
+
+    if not os.path.exists(output):
+        gdown.download(url, output, quiet=False)
+
+def model_prediction(test_image):
+    download_model_from_drive()
+    model = tf.keras.models.load_model("trained_model.keras")
+    
+    image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128, 128))
+    input_arr = tf.keras.preprocessing.image.img_to_array(image)
+    input_arr = np.array([input_arr])  # Convert single image to batch
+    predictions = model.predict(input_arr)
+    return np.argmax(predictions)
 #Sidebar
 st.sidebar.title("Dashboard")
 app_mode = st.sidebar.selectbox("Select Page",["Home","About","Disease Recognition"])
 
 #Main Page
 if(app_mode=="Home"):
-    st.header("PLANT DISEASE RECOGNITION SYSTEM")
-    image_path = "home_page.jpeg"
-    st.image(image_path,use_column_width=True)
-    st.markdown("""
-    Welcome to the Plant Disease Recognition System! 🌿🔍
-    
-    Our mission is to help in identifying plant diseases efficiently. Upload an image of a plant, and our system will analyze it to detect any signs of diseases. Together, let's protect our crops and ensure a healthier harvest!
+    # st.header("PLANT DISEASE RECOGNITION SYSTEM")
+     image_path = "/Users/madhavdwivedi/Documents/GitHub/plant-disease-detection/hbtu logo.jpg"  
+     st.image(image_path, use_container_width=True)
+     st.markdown("""
+                 # 🌿 Plant Disease Recognition System
 
-    ### How It Works
-    1. **Upload Image:** Go to the **Disease Recognition** page and upload an image of a plant with suspected diseases.
-    2. **Analysis:** Our system will process the image using advanced algorithms to identify potential diseases.
-    3. **Results:** View the results and recommendations for further action.
+    Welcome to the Plant Disease Detection Platform — a smart solution to help identify crop diseases using AI.
 
-    ### Why Choose Us?
-    - **Accuracy:** Our system utilizes state-of-the-art machine learning techniques for accurate disease detection.
-    - **User-Friendly:** Simple and intuitive interface for seamless user experience.
-    - **Fast and Efficient:** Receive results in seconds, allowing for quick decision-making.
+    ---
+    ### 📘 Project Details
 
-    ### Get Started
-    Click on the **Disease Recognition** page in the sidebar to upload an image and experience the power of our Plant Disease Recognition System!
+    This platform is developed as part of a college project that focuses on real-world applications of machine learning in agriculture.  
+    It demonstrates how AI can contribute to **food security** and **sustainable farming practices** by enabling faster and more accurate disease detection.
 
-    ### About Us
-    Learn more about the project, our team, and our goals on the **About** page.
-    """)
+    ---
+    ### 🔍 How It Works
+    1. **Upload Image:** Go to the **Disease Recognition** page and upload an image of a plant showing symptoms.  
+    2. **Analysis:** Our system will process the image using a trained deep learning model.  
+    3. **Results:** The system will predict the disease and provide the result instantly.
+
+                """)
+
+
+     
 
 #About Project
 elif(app_mode=="About"):
     st.header("About")
     st.markdown("""
                 #### About Dataset
-                This dataset is recreated using offline augmentation from the original dataset.The original dataset can be found on this github repo.
-                This dataset consists of about 87K rgb images of healthy and diseased crop leaves which is categorized into 38 different classes.The total dataset is divided into 80/20 ratio of training and validation set preserving the directory structure.
+                This dataset is recreated using offline augmentation from the original dataset.This dataset consists of about 87K rgb images of healthy and diseased crop leaves which is categorized into 38 different classes.The total dataset is divided into 80/20 ratio of training and validation set preserving the directory structure.
                 A new directory containing 33 test images is created later for prediction purpose.
                 #### Content
                 1. train (70295 images)
