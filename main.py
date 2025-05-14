@@ -18,7 +18,7 @@ app_mode = st.sidebar.selectbox("Select Page",["Home","About","Disease Recogniti
 #Main Page
 if(app_mode=="Home"):
     # st.header("PLANT DISEASE RECOGNITION SYSTEM")
-     image_path = "/Users/madhavdwivedi/Documents/GitHub/plant-disease-detection/hbtu logo.jpg"  
+     image_path = "hbtu logo.jpg"  # Update this to use relative path
      st.image(image_path, use_container_width=True)
      st.markdown("""
                  # 🌿 Plant Disease Recognition System
